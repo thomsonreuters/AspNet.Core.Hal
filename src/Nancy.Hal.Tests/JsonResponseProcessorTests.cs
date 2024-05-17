@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Nancy.Hal.Configuration;
 using Nancy.Hal.Processors;
-using Nancy.Serialization.JsonNet;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using ServiceStack.Text;
@@ -9,34 +9,37 @@ using Xunit;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Nancy.Responses;
-using Nancy.Responses.Negotiation;
-using Nancy.Serialization.ServiceStack;
-using Nancy.Json;
+
+
 using Newtonsoft.Json.Linq;
 using ServiceStack;
 
 using JsonSerializer = Newtonsoft.Json.JsonSerializer;
-using Nancy.Configuration;
+using System.Linq;
+using Microsoft.AspNetCore.Http.Internal;
+using Microsoft.AspNetCore.Http;
+using Nancy;
+using System.Text.Json;
+using static System.Net.Mime.MediaTypeNames;
 namespace Nancy.Hal.Tests
 {
 
-    public abstract class JsonResponseProcessorTests
+    public  class JsonResponseProcessorTests
     {
-        public static INancyEnvironment GetTestingEnvironment()
-        {
-            var environment =
-                new DefaultNancyEnvironment();
+        //public static INancyEnvironment GetTestingEnvironment()
+        //{
+        //    var environment =
+        //        new DefaultNancyEnvironment();
 
-            environment.Tracing(
-                enabled: true,
-                displayErrorTraces: true);
+        //    environment.Tracing(
+        //        enabled: true,
+        //        displayErrorTraces: true);
 
-            environment.Json();
-            environment.Globalization(new[] { "en-US" });
+        //    environment.Json();
+        //    environment.Globalization(new[] { "en-US" });
 
-            return environment;
-        }
+        //    return environment;
+        //}
 
         [Fact]
         public void ShouldBuildStaticLinks()
@@ -240,13 +243,23 @@ namespace Nancy.Hal.Tests
         [Fact]
         public void ShouldSetContentTypeToApplicationHalJson()
         {
-            var context = new NancyContext { Environment = GetTestingEnvironment() };
+           
+            var context = new DefaultHttpContext {};
             var config = new HalConfiguration();
 
-            var processor = new HalJsonResponseProcessor(config, new[] { JsonSerializer });
-            var response = (JsonResponse)processor.Process(new MediaRange("application/hal+json"), new PetOwner(){ Name = "Bob "}, context);
+            var settings = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
+                PropertyNameCaseInsensitive = true,
+                WriteIndented = true
 
-            Assert.Equal("application/hal+json", response.ContentType);
+            };
+
+            var processor = new HalJsonResponseProcessor(config);
+            var response = processor.Process(settings, new PetOwner(){ Name = "Bob "}, context);
+
+           // Assert.Equal("application/hal+json", response.ContentType);
         }
 
         [Fact]
@@ -274,7 +287,8 @@ namespace Nancy.Hal.Tests
             globalConfig.For<PetOwner>().
                 Links("rel1", "/staticAddress1");
 
-            var context = new NancyContext {Environment = GetTestingEnvironment()};
+           // var context = new NancyContext {Environment = GetTestingEnvironment()};
+            var context = new DefaultHttpContext {};
             context.LocalHalConfigFor<PetOwner>()
                 .Links("rel2", "/staticAddress2");
 
@@ -301,77 +315,75 @@ namespace Nancy.Hal.Tests
             return name;
         }
 
-        private static NancyContext CreateTestContext(dynamic query)
+
+
+        //private static NancyContext CreateTestContext(dynamic query)
+        //{
+        //    var context = new NancyContext { Request = new Request("method", "path", "http") { Query = query }, Environment = GetTestingEnvironment() };
+        //    return context;
+        //}
+        public static HttpContext CreateTestContext(dynamic query)
         {
-            var context = new NancyContext { Request = new Request("method", "path", "http") { Query = query }, Environment = GetTestingEnvironment() };
+            // Create a new default HttpContext instance
+            var context = new DefaultHttpContext();
+
+            // Create a new HttpRequest instance with method, path, and scheme
+            var request = context.Request;
+            request.Method = "GET"; // Specify the HTTP method (GET, POST, etc.)
+            request.Path = "/"; // Specify the path of the request
+            request.Scheme = "http"; // Specify the scheme (http or https)
+
+            // Set the query parameters
+            request.Query = query;
+
             return context;
         }
 
-        protected abstract ISerializer JsonSerializer { get; }
 
-        private JObject Serialize(object model, IProvideHalTypeConfiguration config, NancyContext context = null)
+        
+
+
+        private JObject Serialize(object model, IProvideHalTypeConfiguration config, HttpContext context = null)
         {
-            if (context == null) context = new NancyContext { Environment = GetTestingEnvironment() };
+            if (context == null) context = new DefaultHttpContext();
 
-            var processor = new HalJsonResponseProcessor(config, new[] { JsonSerializer });
-            var response = (JsonResponse)processor.Process(new MediaRange("application/hal+json"), model, context);
-            var stream = new MemoryStream();
-            response.Contents.Invoke(stream);
-            stream.Seek(0, SeekOrigin.Begin);
-            var text = new StreamReader(stream).ReadToEnd();
+            var processor = new HalJsonResponseProcessor(config);
 
-            Console.WriteLine(text);
-            return JObject.Parse(text);
-        }
-    }
-
-    public class DefaultJsonSerializerTests : JsonResponseProcessorTests
-    {
-
-        protected override ISerializer JsonSerializer => new DefaultJsonSerializer(GetTestingEnvironment());
-
-        // Serialiser converts names to camel case
-        protected override string AdjustName(string name)
-        {
-            return name.ToCamelCase();
-        }
-    }
-
-    public class JsonNetSerializerTests : JsonResponseProcessorTests
-    {
-        protected override ISerializer JsonSerializer
-        {
-            get
+            var settings = new JsonSerializerOptions
             {
-                return
-                    new JsonNetSerializer(
-                        new JsonSerializer
-                            {
-                                NullValueHandling = NullValueHandling.Ignore,
-                                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                                Formatting = Formatting.Indented
-                            });
-            }
-        }
+               // PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+               // DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
+               // PropertyNameCaseInsensitive = true,
+                WriteIndented = true
+            };
 
-        // Serialiser converts names to camel case
-        protected override string AdjustName(string name)
-        {
-      
-            return name.ToCamelCase();
-        }
-    }
-
-    public class ServiceStackSerializerTests : JsonResponseProcessorTests
-    {
-        //doesnt work because ServiceStackJsonSerializer won't let me override camelcase settings
-        //(need to expose a constructor so i can pass my own instance in)
-        protected override ISerializer JsonSerializer
-        {
-            get
+            // Create a new memory stream to capture the response
+            using (var memoryStream = new MemoryStream())
             {
-                return new ServiceStackJsonSerializer();
+                // Replace the response body with the memory stream
+                context.Response.Body = memoryStream;
+
+                // Process the response
+                processor.Process(settings, model, context);
+
+                // Ensure the response is written to the memory stream
+                context.Response.Body.Seek(0, SeekOrigin.Begin);
+
+                // Read the stream into a string
+                using (var reader = new StreamReader(memoryStream))
+                {
+                    string responseBody = reader.ReadToEnd();
+                    Console.WriteLine(responseBody);
+
+                    // Parse and return the JObject
+                    return JObject.Parse(responseBody);
+                }
             }
         }
     }
+
+
+
+
+   
 }

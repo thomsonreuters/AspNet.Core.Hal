@@ -1,0 +1,6 @@
+@Core.Hal.Example_HostAddress = http://localhost:5017
+
+GET {{Core.Hal.Example_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

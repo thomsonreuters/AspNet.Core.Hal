@@ -3,56 +3,35 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
+using System.Text.Json;
+using System.Threading.Tasks;
 using Nancy.Hal.Configuration;
-using Nancy.Responses;
-using Nancy.Responses.Negotiation;
 
 namespace Nancy.Hal.Processors
 {
-    public class HalJsonResponseProcessor : IResponseProcessor
+    public class HalJsonResponseProcessor : IHalJsonResponseProcessor
     {
-        private static readonly IEnumerable<Tuple<string, MediaRange>> extensionMappings =
-            new[] { new Tuple<string, MediaRange>("haljson", new MediaRange("application/hal+json")) };
-
         private const string ContentType = "application/hal+json";
-        private readonly IProvideHalTypeConfiguration configuration;
-        private readonly ISerializer serializer;
+        private readonly IProvideHalTypeConfiguration _configuration;
 
-
-
-        public HalJsonResponseProcessor(IProvideHalTypeConfiguration configuration, IEnumerable<ISerializer> serializers)
+        public HalJsonResponseProcessor(IProvideHalTypeConfiguration configuration)
         {
-            this.configuration = configuration;
-            serializer = serializers.FirstOrDefault(x => x.CanSerialize("application/json")); //any json serializer will do
+            _configuration = configuration;
         }
 
-        public ProcessorMatch CanProcess(MediaRange requestedMediaRange, dynamic model, NancyContext context)
+        public async Task<HttpContext> Process(JsonSerializerOptions jsonSerializerSettings, dynamic model, HttpContext context)
         {
-            if (requestedMediaRange.Matches(ContentType))
-            {
-                return new ProcessorMatch
-                {
-                    ModelResult = MatchResult.ExactMatch,
-                    RequestedContentTypeResult = MatchResult.ExactMatch
-                };
-            }
-
-            return new ProcessorMatch
-            {
-                ModelResult = MatchResult.DontCare,
-                RequestedContentTypeResult = MatchResult.NoMatch
-            };
+            var halResponse = BuildHypermedia(model, context);
+            string jsonResponse = JsonSerializer.Serialize(halResponse, jsonSerializerSettings);
+            context.Response.ContentType = ContentType;
+            context.Response.StatusCode = StatusCodes.Status200OK;
+            await context.Response.WriteAsync(jsonResponse);
+            return context;
         }
 
-        public Response Process(MediaRange requestedMediaRange, dynamic model, NancyContext context)
-        {
-            return new JsonResponse(BuildHypermedia(model, context), serializer, context.Environment)
-                       {
-                           ContentType = "application/hal+json"
-                       };
-        }
 
-        private dynamic BuildHypermedia(object model, NancyContext context)
+        private dynamic BuildHypermedia(object model, HttpContext context)
         {
             if (model == null) return null;
 
@@ -63,7 +42,7 @@ namespace Nancy.Hal.Processors
             }
 
             IDictionary<string, object> halModel = model.ToDynamic();
-            var globalTypeConfig = configuration.GetTypeConfiguration(model.GetType());
+            var globalTypeConfig = _configuration.GetTypeConfiguration(model.GetType());
             var localTypeConfig = context.LocalHalConfig().GetTypeConfiguration(model.GetType());
 
             var typeConfig = new AggregatingHalTypeConfiguration(new List<IHalTypeConfiguration> { globalTypeConfig, localTypeConfig });
@@ -92,7 +71,7 @@ namespace Nancy.Hal.Processors
 
         private static dynamic BuildDynamicLinksOrLink(IEnumerable<Link> grp)
         {
-            return grp.Count()>1 ? grp.Select(l=>BuildDynamicLink(l)) : BuildDynamicLink(grp.First());
+            return grp.Count() > 1 ? grp.Select(l => BuildDynamicLink(l)) : BuildDynamicLink(grp.First());
         }
 
         private static dynamic BuildDynamicLink(Link link)
@@ -103,13 +82,11 @@ namespace Nancy.Hal.Processors
             if (!string.IsNullOrEmpty(link.Title)) dynamicLink.title = link.Title;
             return dynamicLink;
         }
+        
+    }
 
-        public IEnumerable<Tuple<string, MediaRange>> ExtensionMappings
-        {
-            get
-            {
-                return extensionMappings;
-            }
-        }
+    public interface IHalJsonResponseProcessor
+    {
+        Task<HttpContext> Process(JsonSerializerOptions jsonSerializerSettings, dynamic model, HttpContext context);
     }
 }

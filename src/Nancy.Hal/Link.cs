@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 
 using Nancy.Hal.Configuration;
 
 namespace Nancy.Hal
 {
+    using Microsoft.AspNetCore.Http;
+    using System.Linq;
     using System.Reflection;
+    using System.Text.RegularExpressions;
+
 
     public class Link : IEquatable<Link>
     {
@@ -27,7 +30,7 @@ namespace Nancy.Hal
         }
 
         public Link()
-        {}
+        { }
 
         public Link(string rel, string href, string title = null)
         {
@@ -60,19 +63,19 @@ namespace Nancy.Hal
             return new Link(newRel, Href, Title);
         }
 
-		/// <summary>
-		/// If this link is templated, you can use this method to make a non-templated copy, providing a title.
-		/// </summary>
-		/// <param name="title">The title.</param>
-		/// <param name="newRel">The new relative.</param>
-		/// <param name="parameters">The parameters.</param>
-		/// <returns></returns>
-		public Link CreateLink(string title, string newRel, params object[] parameters) 
-		{
-			var lnk = ChangeRel(newRel).CreateLink(parameters);
-			lnk.Title = title;
-			return lnk;
-		}
+        /// <summary>
+        /// If this link is templated, you can use this method to make a non-templated copy, providing a title.
+        /// </summary>
+        /// <param name="title">The title.</param>
+        /// <param name="newRel">The new relative.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns></returns>
+        public Link CreateLink(string title, string newRel, params object[] parameters)
+        {
+            var lnk = ChangeRel(newRel).CreateLink(parameters);
+            lnk.Title = title;
+            return lnk;
+        }
 
         /// <summary>
         /// If this link is templated, you can use this method to make a non templated copy
@@ -97,7 +100,15 @@ namespace Nancy.Hal
 
         private Uri CreateUri(params object[] parameters)
         {
-            return new Uri(SubstituteParams(Href, parameters), UriKind.RelativeOrAbsolute);
+            try
+            {
+                return new Uri(SubstituteParams(Href, parameters), UriKind.RelativeOrAbsolute);
+            }
+            catch (Exception ex)
+            {
+
+                return null;
+            }
         }
 
         private static string SubstituteParams(string href, params object[] parameters)
@@ -118,19 +129,32 @@ namespace Nancy.Hal
                 }
                 else
                 {
+                    var dynamicParameter = (dynamic)parameter;
                     foreach (var substitution in parameter.GetType().GetProperties())
                     {
                         var name = substitution.Name.ToCamelCaseString();
+                        if (parameter.GetType().GetInterfaces().Contains(typeof(IQueryCollection)))
+                        {
+                            IQueryCollection queryCollection = (IQueryCollection)parameter;
+
+                            if (queryCollection.Count == 0)
+                            {
+                                continue;
+                            }
+                        }
+
                         var value = substitution.GetValue(parameter, null);
                         var substituionValue = value == null ? null : value.ToString();
                         uriTemplate.SetParameter(name, substituionValue);
+
                     }
                 }
             }
 
             return uriTemplate.Resolve();
         }
-    
+
+
         public bool Equals(Link other)
         {
             return string.Compare(Href, other.Href, StringComparison.OrdinalIgnoreCase) == 0 &&
@@ -163,7 +187,7 @@ namespace Nancy.Hal
         }
 
         public override string ToString()
-        {                 
+        {
             return string.Format("Rel={0}, Href={1}", Rel, Href);
         }
     }
