@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 
 using Nancy.Hal.Configuration;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
+using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace Nancy.Hal
 {
-    using Microsoft.AspNetCore.Http;
-    using System.Linq;
-    using System.Reflection;
-    using System.Text.RegularExpressions;
-
-
     public class Link : IEquatable<Link>
     {
         private static readonly Regex IsTemplatedRegex = new Regex(@"{.+}", RegexOptions.Compiled);
@@ -129,23 +128,39 @@ namespace Nancy.Hal
                 }
                 else
                 {
-                    var dynamicParameter = (dynamic)parameter;
+                 
                     foreach (var substitution in parameter.GetType().GetProperties())
                     {
                         var name = substitution.Name.ToCamelCaseString();
                         if (parameter.GetType().GetInterfaces().Contains(typeof(IQueryCollection)))
                         {
-                            IQueryCollection queryCollection = (IQueryCollection)parameter;
+                            IQueryCollection isQueryCollection = (IQueryCollection)parameter;
 
-                            if (queryCollection.Count == 0)
+                            if (isQueryCollection.Count == 0)
                             {
+                                continue;
+                            }
+
+
+                            if (parameter is IQueryCollection queryCollection)
+                            {
+                                foreach (var key in queryCollection.Keys)
+                                {
+                                    var name1 = key.ToCamelCaseString();
+                                    var value1 = queryCollection[key].ToString();
+                                    uriTemplate.SetParameter(name1, value1);
+                                }
                                 continue;
                             }
                         }
 
-                        var value = substitution.GetValue(parameter, null);
-                        var substituionValue = value == null ? null : value.ToString();
-                        uriTemplate.SetParameter(name, substituionValue);
+                         var value = substitution.GetValue(parameter, null);
+                            var substituionValue = value == null ? null : value.ToString();
+                            uriTemplate.SetParameter(name, substituionValue);
+
+                        
+
+                           
 
                     }
                 }

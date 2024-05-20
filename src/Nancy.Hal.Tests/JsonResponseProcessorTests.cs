@@ -1,10 +1,6 @@
 ﻿using System.Linq;
 using Nancy.Hal.Configuration;
 using Nancy.Hal.Processors;
-
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using ServiceStack.Text;
 using Xunit;
 using System;
 using System.Collections.Generic;
@@ -12,34 +8,15 @@ using System.IO;
 
 
 using Newtonsoft.Json.Linq;
-using ServiceStack;
-
-using JsonSerializer = Newtonsoft.Json.JsonSerializer;
-using System.Linq;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Http;
-using Nancy;
 using System.Text.Json;
-using static System.Net.Mime.MediaTypeNames;
+using Microsoft.Extensions.Primitives;
 namespace Nancy.Hal.Tests
 {
 
     public  class JsonResponseProcessorTests
     {
-        //public static INancyEnvironment GetTestingEnvironment()
-        //{
-        //    var environment =
-        //        new DefaultNancyEnvironment();
-
-        //    environment.Tracing(
-        //        enabled: true,
-        //        displayErrorTraces: true);
-
-        //    environment.Json();
-        //    environment.Globalization(new[] { "en-US" });
-
-        //    return environment;
-        //}
 
         [Fact]
         public void ShouldBuildStaticLinks()
@@ -333,15 +310,18 @@ namespace Nancy.Hal.Tests
             request.Path = "/"; // Specify the path of the request
             request.Scheme = "http"; // Specify the scheme (http or https)
 
-            // Set the query parameters
-            request.Query = query;
+            // Convert the dynamic query object to a dictionary
+            var queryParams = new Dictionary<string, StringValues>();
+            foreach (var property in query.GetType().GetProperties())
+            {
+                queryParams.Add(property.Name, new StringValues(property.GetValue(query).ToString()));
+            }
+
+            // Create an IQueryCollection from the dictionary and set it to the reques
+            request.Query = new QueryCollection(queryParams);
 
             return context;
         }
-
-
-        
-
 
         private JObject Serialize(object model, IProvideHalTypeConfiguration config, HttpContext context = null)
         {
