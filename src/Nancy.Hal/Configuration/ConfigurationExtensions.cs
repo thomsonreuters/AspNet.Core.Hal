@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 
-namespace Nancy.Hal.Configuration
+namespace AspnetCore.Hal.Configuration
 {
     public static class ConfigurationExtensions
     {

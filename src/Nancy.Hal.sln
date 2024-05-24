@@ -3,11 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nancy.Hal.Example", "Nancy.Hal.Example\Nancy.Hal.Example.csproj", "{763C7EA5-6A09-43EA-9597-5CBF239A0D51}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspnetCore.Hal", "Nancy.Hal\AspnetCore.Hal.csproj", "{1B360192-4675-45A9-A2CD-2BACBF5BC282}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nancy.Hal", "Nancy.Hal\Nancy.Hal.csproj", "{1B360192-4675-45A9-A2CD-2BACBF5BC282}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nancy.Hal.Tests", "Nancy.Hal.Tests\Nancy.Hal.Tests.csproj", "{79B818A0-4C33-4963-A0F6-835F127A67A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspnetCore.Hal.Tests", "Nancy.Hal.Tests\AspnetCore.Hal.Tests.csproj", "{79B818A0-4C33-4963-A0F6-835F127A67A6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B2C367CC-F374-415B-AB6B-0A35288BEC92}"
 	ProjectSection(SolutionItems) = preProject
@@ -22,7 +20,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{4D80F5
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Hal.Example", "Core.Hal.Example\Core.Hal.Example.csproj", "{D2296660-DC3B-45C7-B366-4A3A00014826}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspnetCoreHal.Example", "Core.Hal.Example\AspnetCoreHal.Example.csproj", "{D2296660-DC3B-45C7-B366-4A3A00014826}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspnetCore.Hal.SystemTextHalJsonFormatter", "AspnetCore.Hal.TextHalJsonFormatter\AspnetCore.Hal.SystemTextHalJsonFormatter.csproj", "{B6EC0267-0E76-411A-BD6A-D66AD9DCBB4A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspnetCore.Hal.NewtonsoftHalJsonFormatter", "AspnetCore.Hal.NewtonsoftHalJsonFormatter\AspnetCore.Hal.NewtonsoftHalJsonFormatter.csproj", "{CCCCAD1F-BB60-4435-93BA-C1A8C3556E47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,10 +32,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{763C7EA5-6A09-43EA-9597-5CBF239A0D51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{763C7EA5-6A09-43EA-9597-5CBF239A0D51}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{763C7EA5-6A09-43EA-9597-5CBF239A0D51}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{763C7EA5-6A09-43EA-9597-5CBF239A0D51}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1B360192-4675-45A9-A2CD-2BACBF5BC282}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1B360192-4675-45A9-A2CD-2BACBF5BC282}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B360192-4675-45A9-A2CD-2BACBF5BC282}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -46,6 +44,14 @@ Global
 		{D2296660-DC3B-45C7-B366-4A3A00014826}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2296660-DC3B-45C7-B366-4A3A00014826}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2296660-DC3B-45C7-B366-4A3A00014826}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6EC0267-0E76-411A-BD6A-D66AD9DCBB4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6EC0267-0E76-411A-BD6A-D66AD9DCBB4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6EC0267-0E76-411A-BD6A-D66AD9DCBB4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6EC0267-0E76-411A-BD6A-D66AD9DCBB4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCCCAD1F-BB60-4435-93BA-C1A8C3556E47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCCCAD1F-BB60-4435-93BA-C1A8C3556E47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCCCAD1F-BB60-4435-93BA-C1A8C3556E47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCCCAD1F-BB60-4435-93BA-C1A8C3556E47}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

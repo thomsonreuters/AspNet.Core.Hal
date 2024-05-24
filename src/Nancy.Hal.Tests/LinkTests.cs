@@ -1,6 +1,6 @@
 ﻿using Xunit;
 
-namespace Nancy.Hal.Tests {
+namespace AspnetCore.Hal.Tests {
 	public class LinkTests {
 		[Fact]
 		public void A_link_can_be_created() {

@@ -1,4 +1,4 @@
-﻿namespace Core.Hal.Example.Model
+﻿namespace AspnetCoreHal.Example.Model
 {
     public class test
     {

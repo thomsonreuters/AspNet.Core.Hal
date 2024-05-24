@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using Nancy.Hal.Configuration;
+using AspnetCore.Hal.Configuration;
 
-namespace Nancy.Hal.Tests
+namespace AspnetCore.Hal.Tests
 {
     public class MockTypeConfiguration : IProvideHalTypeConfiguration
     {

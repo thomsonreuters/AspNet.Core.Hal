@@ -1,12 +1,9 @@
 using AutoMapper;
-using Core.Hal.Example.Model.Users.ViewModels;
-using Core.Hal.Example.Model;
-using Core.Hal.Example;
-using Nancy.Hal.Configuration;
-using Nancy.Hal.Processors;
-using System.Text.Json;
-using Nancy.Hal;
-;
+using AspnetCoreHal.Example.Model.Users.ViewModels;
+using AspnetCoreHal.Example.Model;
+using AspnetCore.Hal.Configuration;
+using AspnetCore.Hal;
+using AspnetCore.Hal.NewtonsoftHalJsonFormatter;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,19 +15,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddAutoMapper(typeof(DomainProfile));
-builder.Services.AddSingleton<IHalJsonResponseProcessor, HalJsonResponseProcessor>();
+
 builder.Services.AddSingleton<IProvideHalTypeConfiguration>(provider => Halconfig.HypermediaConfiguration());
 
-builder.Services.AddScoped<SupportsHalAttribute>();
 
-builder.Services.AddSingleton(new JsonSerializerOptions
-{
-    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-    DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
-    PropertyNameCaseInsensitive = true,
-    WriteIndented = true,
-
-});
+builder.Services.AddHalSupport();
 
 var app = builder.Build();
 

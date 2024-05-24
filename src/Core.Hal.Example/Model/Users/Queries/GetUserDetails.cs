@@ -1,4 +1,4 @@
-﻿namespace Core.Hal.Example.Model.Users.Queries
+﻿namespace AspnetCoreHal.Example.Model.Users.Queries
 {
     using System;
 

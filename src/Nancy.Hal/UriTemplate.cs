@@ -1,4 +1,4 @@
-﻿namespace Nancy.Hal
+﻿namespace AspnetCore.Hal
 {
     using System;
     using System.Collections;

@@ -1,21 +1,19 @@
 ﻿using System.Linq;
-using Nancy.Hal.Configuration;
-using Nancy.Hal.Processors;
+using AspnetCore.Hal.Configuration;
+using AspnetCore.Hal.Processors;
 using Xunit;
 using System;
 using System.Collections.Generic;
-using System.IO;
-
-
 using Newtonsoft.Json.Linq;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Http;
 using System.Text.Json;
 using Microsoft.Extensions.Primitives;
-namespace Nancy.Hal.Tests
+using Newtonsoft.Json;
+namespace AspnetCore.Hal.Tests
 {
 
-    public  class JsonResponseProcessorTests
+    public class JsonResponseProcessorTests
     {
 
         [Fact]
@@ -25,8 +23,8 @@ namespace Nancy.Hal.Tests
             config.For<PetOwner>().
                 Links("rel1", "/staticAddress1").
                 Links(new Link("rel2", "/staticAddress2"));
-            
-            var json = Serialize(new PetOwner {Name = "Bob"}, config);
+
+            var json = Serialize(new PetOwner { Name = "Bob" }, config);
 
             Assert.Equal("Bob", GetStringValue(json, "Name"));
             Assert.Equal("/staticAddress1", GetStringValue(json, "_links", "rel1", "href"));
@@ -101,11 +99,11 @@ namespace Nancy.Hal.Tests
                 LiveStock = new Animal { Type = "Chicken" }
             };
             var json = Serialize(model, config);
-             
+
             Assert.Equal("Cat", GetData(json, "_embedded", "pampered")[0][AdjustName("Type")]);
             Assert.Equal("Chicken", GetStringValue(json, "_embedded", "liveStock", "Type"));
         }
-        
+
         [Fact]
         public void ShouldEmbedSubResourcesWhenPredicateIsTrue()
         {
@@ -183,8 +181,8 @@ namespace Nancy.Hal.Tests
         {
             var config = new HalConfiguration();
             config.For<PetOwner>().
-                Projects("pampered", owner => owner.Pets, pets => new {petCount=pets.Count()}).
-                Projects(owner => owner.LiveStock, stock => new {stockType=stock.Type});
+                Projects("pampered", owner => owner.Pets, pets => new { petCount = pets.Count() }).
+                Projects(owner => owner.LiveStock, stock => new { stockType = stock.Type });
 
             var model = new PetOwner
             {
@@ -193,7 +191,7 @@ namespace Nancy.Hal.Tests
                 Pets = new[] { new Animal { Type = "Cat" } },
                 LiveStock = new Animal { Type = "Chicken" }
             };
-            var json = Serialize(model, config, CreateTestContext(new{Operation="Duck"}));
+            var json = Serialize(model, config, CreateTestContext(new { Operation = "Duck" }));
 
             Assert.Equal("1", GetData(json, "_embedded", "pampered", "petCount"));
             Assert.Equal("Chicken", GetStringValue(json, "_embedded", "liveStock", "stockType"));
@@ -220,8 +218,8 @@ namespace Nancy.Hal.Tests
         [Fact]
         public void ShouldSetContentTypeToApplicationHalJson()
         {
-           
-            var context = new DefaultHttpContext {};
+
+            var context = new DefaultHttpContext { };
             var config = new HalConfiguration();
 
             var settings = new JsonSerializerOptions
@@ -234,9 +232,10 @@ namespace Nancy.Hal.Tests
             };
 
             var processor = new HalJsonResponseProcessor(config);
-            var response = processor.Process(settings, new PetOwner(){ Name = "Bob "}, context);
+            //var response = processor.Process(settings, new PetOwner(){ Name = "Bob "}, context);
+            var response = processor.BuildHypermedia(new PetOwner() { Name = "Bob " }, context);
 
-           // Assert.Equal("application/hal+json", response.ContentType);
+            // Assert.Equal("application/hal+json", response.ContentType);
         }
 
         [Fact]
@@ -264,8 +263,8 @@ namespace Nancy.Hal.Tests
             globalConfig.For<PetOwner>().
                 Links("rel1", "/staticAddress1");
 
-           // var context = new NancyContext {Environment = GetTestingEnvironment()};
-            var context = new DefaultHttpContext {};
+            // var context = new NancyContext {Environment = GetTestingEnvironment()};
+            var context = new DefaultHttpContext { };
             context.LocalHalConfigFor<PetOwner>()
                 .Links("rel2", "/staticAddress2");
 
@@ -275,16 +274,16 @@ namespace Nancy.Hal.Tests
             Assert.Equal("/staticAddress1", GetStringValue(json, "_links", "rel1", "href"));
             Assert.Equal("/staticAddress2", GetStringValue(json, "_links", "rel2", "href"));
         }
-        
+
         private object GetStringValue(JToken json, params string[] names)
         {
             var data = GetData(json, names);
-            return data!=null ? data.ToString() : null;
+            return data != null ? data.ToString() : null;
         }
 
         private JToken GetData(JToken json, params string[] names)
         {
-            return names.Aggregate(json, (current, name) => current!=null ? current[AdjustName(name)] : null);
+            return names.Aggregate(json, (current, name) => current != null ? current[AdjustName(name)] : null);
         }
 
         protected virtual string AdjustName(string name)
@@ -323,47 +322,20 @@ namespace Nancy.Hal.Tests
             return context;
         }
 
-        private JObject Serialize(object model, IProvideHalTypeConfiguration config, HttpContext context = null)
+        private static JObject Serialize(object model, IProvideHalTypeConfiguration config, HttpContext context = null)
         {
-            if (context == null) context = new DefaultHttpContext();
-
+            context ??= new DefaultHttpContext();
             var processor = new HalJsonResponseProcessor(config);
+            // Process the response
+            var halResponse = processor.BuildHypermedia(model, context);
+            var response = JsonConvert.SerializeObject(halResponse);
+            return JObject.Parse(response);
 
-            var settings = new JsonSerializerOptions
-            {
-               // PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-               // DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
-               // PropertyNameCaseInsensitive = true,
-                WriteIndented = true
-            };
-
-            // Create a new memory stream to capture the response
-            using (var memoryStream = new MemoryStream())
-            {
-                // Replace the response body with the memory stream
-                context.Response.Body = memoryStream;
-
-                // Process the response
-                processor.Process(settings, model, context);
-
-                // Ensure the response is written to the memory stream
-                context.Response.Body.Seek(0, SeekOrigin.Begin);
-
-                // Read the stream into a string
-                using (var reader = new StreamReader(memoryStream))
-                {
-                    string responseBody = reader.ReadToEnd();
-                    Console.WriteLine(responseBody);
-
-                    // Parse and return the JObject
-                    return JObject.Parse(responseBody);
-                }
-            }
         }
     }
 
 
 
 
-   
+
 }

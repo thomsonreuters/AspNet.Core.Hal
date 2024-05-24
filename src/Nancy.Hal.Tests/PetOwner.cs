@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Nancy.Hal.Tests
+namespace AspnetCore.Hal.Tests
 {
     public class PetOwner
     {

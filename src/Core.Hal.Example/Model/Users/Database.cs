@@ -1,12 +1,12 @@
-﻿namespace Core.Hal.Example.Model.Users
+﻿namespace AspnetCoreHal.Example.Model.Users
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using AutoMapper;
-    using Core.Hal.Example.Model.Users.Commands;
-    using Core.Hal.Example.Model.Users.Queries;
-    using Core.Hal.Example.Model.Users.ViewModels;
+    using AspnetCoreHal.Example.Model.Users.Commands;
+    using AspnetCoreHal.Example.Model.Users.Queries;
+    using AspnetCoreHal.Example.Model.Users.ViewModels;
     public class Database(IMapper mapper)
     {
         private static readonly IList<UserDetails> userDatabase = new List<UserDetails>();

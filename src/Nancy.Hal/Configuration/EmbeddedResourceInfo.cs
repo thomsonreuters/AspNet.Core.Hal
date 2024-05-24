@@ -1,4 +1,4 @@
-﻿namespace Nancy.Hal.Configuration
+﻿namespace AspnetCore.Hal.Configuration
 {
     using System;
 

@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
-using Core.Hal.Example.Model.Users.ViewModels;
-using Core.Hal.Example.Model.Users;
+using AspnetCoreHal.Example.Model.Users.ViewModels;
+using AspnetCoreHal.Example.Model.Users;
 using Microsoft.AspNetCore.Mvc;
 using AutoFixture;
-using Core.Hal.Example.Model.Users.Commands;
-using Core.Hal.Example.Model;
+using AspnetCoreHal.Example.Model.Users.Commands;
+using AspnetCoreHal.Example.Model;
 
-namespace Core.Hal.Example.Controllers
+namespace AspnetCoreHal.Example.Controllers
 {
-    [ServiceFilter(typeof(SupportsHalAttribute))]
+
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase

@@ -1,6 +1,6 @@
-﻿using Core.Hal.Example.Model;
+﻿using AspnetCoreHal.Example.Model;
 
-namespace Core.Hal.Example.Model.Users.Queries
+namespace AspnetCoreHal.Example.Model.Users.Queries
 {
     public class GetRoleList : IGetPagedItemsRequest
     {

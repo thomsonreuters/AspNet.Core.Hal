@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Nancy.Hal\Nancy.Hal.csproj" />
+    <ProjectReference Include="..\AspnetCore.Hal.NewtonsoftHalJsonFormatter\AspnetCore.Hal.NewtonsoftHalJsonFormatter.csproj" />
   </ItemGroup>
 
 </Project>

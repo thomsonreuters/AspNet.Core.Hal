@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 
-namespace Nancy.Hal.Configuration
+namespace AspnetCore.Hal.Configuration
 {
     public interface IProvideHalTypeConfiguration
     {

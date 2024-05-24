@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.AspNetCore.Http;
 
-namespace Nancy.Hal.Configuration
+namespace AspnetCore.Hal.Configuration
 {
     public interface IHalTypeConfiguration
     {

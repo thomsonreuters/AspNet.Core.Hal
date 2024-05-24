@@ -6,9 +6,9 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Nancy.Hal.Configuration;
+using AspnetCore.Hal.Configuration;
 
-namespace Nancy.Hal.Processors
+namespace AspnetCore.Hal.Processors
 {
     public class HalJsonResponseProcessor : IHalJsonResponseProcessor
     {
@@ -20,18 +20,18 @@ namespace Nancy.Hal.Processors
             _configuration = configuration;
         }
 
-        public async Task<HttpContext> Process(JsonSerializerOptions jsonSerializerSettings, dynamic model, HttpContext context)
-        {
-            var halResponse = BuildHypermedia(model, context);
-            string jsonResponse = JsonSerializer.Serialize(halResponse, jsonSerializerSettings);
-            context.Response.ContentType = ContentType;
-            context.Response.StatusCode = StatusCodes.Status200OK;
-            await context.Response.WriteAsync(jsonResponse);
-            return context;
-        }
+        //public async Task<HttpContext> Process(JsonSerializerOptions jsonSerializerSettings, dynamic model, HttpContext context)
+        //{
+        //    var halResponse = BuildHypermedia(model, context);
+        //    string jsonResponse = JsonSerializer.Serialize(halResponse, jsonSerializerSettings);
+        //    context.Response.ContentType = ContentType;
+        //    context.Response.StatusCode = StatusCodes.Status200OK;
+        //    await context.Response.WriteAsync(jsonResponse);
+        //    return context;
+        //}
 
 
-        private dynamic BuildHypermedia(object model, HttpContext context)
+        public dynamic BuildHypermedia(object model, HttpContext context)
         {
             if (model == null) return null;
 
@@ -87,6 +87,9 @@ namespace Nancy.Hal.Processors
 
     public interface IHalJsonResponseProcessor
     {
-        Task<HttpContext> Process(JsonSerializerOptions jsonSerializerSettings, dynamic model, HttpContext context);
+        //Task<HttpContext> Process(JsonSerializerOptions jsonSerializerSettings, dynamic model, HttpContext context);
+
+
+        dynamic BuildHypermedia(object model, HttpContext context);
     }
 }

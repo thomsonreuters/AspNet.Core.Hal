@@ -1,4 +1,4 @@
-﻿namespace Core.Hal.Example.Model.Users.ViewModels
+﻿namespace AspnetCoreHal.Example.Model.Users.ViewModels
 {
     using System;
 

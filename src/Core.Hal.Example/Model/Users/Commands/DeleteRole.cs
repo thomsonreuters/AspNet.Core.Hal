@@ -1,4 +1,4 @@
-﻿namespace Core.Hal.Example.Model.Users.Commands
+﻿namespace AspnetCoreHal.Example.Model.Users.Commands
 {
     using System;
 

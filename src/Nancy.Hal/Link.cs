@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Nancy.Hal.Configuration;
+using AspnetCore.Hal.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-namespace Nancy.Hal
+namespace AspnetCore.Hal
 {
     public class Link : IEquatable<Link>
     {

@@ -1,10 +1,6 @@
-﻿
+﻿using AspnetCore.Hal;
 
-
-
-using Nancy.Hal;
-
-namespace Core.Hal.Example.Model
+namespace AspnetCoreHal.Example.Model
 {
 
     public static class LinkTemplates
