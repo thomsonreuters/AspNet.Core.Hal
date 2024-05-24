@@ -18,7 +18,6 @@ builder.Services.AddAutoMapper(typeof(DomainProfile));
 
 builder.Services.AddSingleton<IProvideHalTypeConfiguration>(provider => Halconfig.HypermediaConfiguration());
 
-
 builder.Services.AddHalSupport();
 
 var app = builder.Build();

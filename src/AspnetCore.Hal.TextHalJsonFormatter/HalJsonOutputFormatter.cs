@@ -7,12 +7,13 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.DependencyInjection;
 using AspnetCore.Hal.Processors;
 using Microsoft.Net.Http.Headers;
+using Microsoft.Extensions.Primitives;
 
 namespace AspnetCore.Hal.SystemTextHalJsonFormatter;
 
 public class HalJsonOutputFormatter : SystemTextJsonOutputFormatter
 {
-    private static MediaTypeHeaderValue AcceptableMimeType = MediaTypeHeaderValue.Parse("application/hal+json; charset=utf-8");
+    private static readonly MediaTypeHeaderValue AcceptableMimeType = MediaTypeHeaderValue.Parse("application/hal+json");
 
     public HalJsonOutputFormatter(JsonSerializerOptions jsonSerializerOptions) : base(jsonSerializerOptions)
     {
@@ -23,23 +24,27 @@ public class HalJsonOutputFormatter : SystemTextJsonOutputFormatter
 
     public override bool CanWriteResult(OutputFormatterCanWriteContext context)
     {
-        if (context.HttpContext.Request.Headers.TryGetValue(HeaderNames.Accept, out var acceptHeader))
+        if (!context.HttpContext.Request.Headers.TryGetValue(HeaderNames.Accept, out var acceptHeader))
         {
-            var hasSupportedHeader = acceptHeader.Any(headerValue =>
+            return false;
+        }
+        var hasSupportedHeader = acceptHeader.Any(headerValue =>
             {
                 if (MediaTypeHeaderValue.TryParse(headerValue, out var parsedHeader))
                 {
-                    return AcceptableMimeType.SubType.Equals(parsedHeader.SubType);
+                    var hasSupportedHeader = context.HttpContext.Request.Headers.Accept
+                        .Select(a => new MediaTypeHeaderValue(new StringSegment(a)))
+                        .Any(x => x.IsSubsetOf(AcceptableMimeType));
+
+                    return hasSupportedHeader;
                 }
                 return false;
             });
 
-            var provider = context.HttpContext.RequestServices;
-            var cfg = provider.GetService<IProvideHalTypeConfiguration>();
+        var provider = context.HttpContext.RequestServices;
+        var cfg = provider.GetService<IProvideHalTypeConfiguration>();
 
-            return hasSupportedHeader && cfg != null;
-        }
-        return false;
+        return hasSupportedHeader && cfg != null;
     }
 
     public override Task WriteAsync(OutputFormatterWriteContext context)

@@ -1,8 +1,9 @@
 ﻿using AspnetCore.Hal.Processors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
+using System.Buffers;
 
 namespace AspnetCore.Hal.NewtonsoftHalJsonFormatter
 {
@@ -10,29 +11,17 @@ namespace AspnetCore.Hal.NewtonsoftHalJsonFormatter
     {
         public static void AddHalSupport(this IServiceCollection services)
         {
-            services.Configure<MvcOptions>(o =>
-            {
-                DefaultContractResolver contractResolver = new DefaultContractResolver
-                {
-                    NamingStrategy = new CamelCaseNamingStrategy
-                    {
-                        ProcessDictionaryKeys = true
-                    }
-                };
-
-                var jsonSerializerSettings = new JsonSerializerSettings
-                {
-                    ContractResolver = contractResolver
-                };
-
-                // Create and add the custom HAL JSON output formatter
-                var formatter = new HalJsonOutputFormatter(jsonSerializerSettings);
-                o.OutputFormatters.Insert(0, formatter);
-
-            });
+            services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<MvcOptions>, HalJsonOptionsSetup>());
             services.AddTransient<IHalJsonResponseProcessor, HalJsonResponseProcessor>();
+        }
+    }
 
-
+    public class HalJsonOptionsSetup(IOptions<MvcNewtonsoftJsonOptions> jsonOptions, ArrayPool<char> charPool) : IConfigureOptions<MvcOptions>
+    {
+        public void Configure(MvcOptions options)
+        {
+            var formatter = new HalJsonOutputFormatter(jsonOptions.Value.SerializerSettings, charPool, options, jsonOptions.Value);
+            options.OutputFormatters.Insert(0, formatter);
         }
     }
 }

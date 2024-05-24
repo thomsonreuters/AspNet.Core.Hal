@@ -8,10 +8,11 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.5" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Nancy.Hal\AspnetCore.Hal.csproj" />
+    <ProjectReference Include="..\AspnetCore.Hal\AspnetCore.Hal.csproj" />
   </ItemGroup>
 
 </Project>

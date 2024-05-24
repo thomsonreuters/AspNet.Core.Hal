@@ -3,17 +3,13 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
-
-  <ItemGroup>
-    <!--<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.1.38" />-->
-  </ItemGroup>
 	
 	  <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Nancy.Hal\AspnetCore.Hal.csproj" />
-  </ItemGroup>
+	
+	  <ItemGroup>
+	    <ProjectReference Include="..\AspnetCore.Hal\AspnetCore.Hal.csproj" />
+	  </ItemGroup>
 
 </Project>

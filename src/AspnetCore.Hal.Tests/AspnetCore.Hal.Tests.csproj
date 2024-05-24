@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Nancy.Hal\AspnetCore.Hal.csproj" />
+    <ProjectReference Include="..\AspnetCore.Hal\AspnetCore.Hal.csproj" />
   </ItemGroup>
 
 </Project>
