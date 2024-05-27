@@ -8,9 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using AspnetCore.Hal.Processors;
 using Microsoft.Net.Http.Headers;
 using Microsoft.Extensions.Primitives;
-using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("AspnetCore.Hal.SystemTextHalJsonFormatter.Tests")]
+
 namespace AspnetCore.Hal.SystemTextHalJsonFormatter;
 
 internal class HalJsonOutputFormatter : SystemTextJsonOutputFormatter

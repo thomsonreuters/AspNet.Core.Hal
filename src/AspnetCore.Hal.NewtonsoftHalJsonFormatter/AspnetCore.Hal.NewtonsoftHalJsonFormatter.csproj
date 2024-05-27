@@ -14,5 +14,10 @@
   <ItemGroup>
     <ProjectReference Include="..\AspnetCore.Hal\AspnetCore.Hal.csproj" />
   </ItemGroup>
+	<ItemGroup>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+			<_Parameter1>AspnetCore.Hal.NewtonsoftHalJsonFormatter.Tests</_Parameter1>
+		</AssemblyAttribute>
+	</ItemGroup>
 
 </Project>
