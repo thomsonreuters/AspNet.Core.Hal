@@ -13,9 +13,7 @@ namespace AspnetCoreHal.Example.Controllers
     [Route("[controller]")]
     public class RolesController : Controller
     {
-        private  readonly IMapper _mapper;
-
-      
+        private  readonly IMapper _mapper;    
         public RolesController(IMapper mapper) 
         
         {

@@ -11,7 +11,7 @@ using Microsoft.Extensions.Primitives;
 
 namespace AspnetCore.Hal.SystemTextHalJsonFormatter;
 
-public class HalJsonOutputFormatter : SystemTextJsonOutputFormatter
+internal class HalJsonOutputFormatter : SystemTextJsonOutputFormatter
 {
     private static readonly MediaTypeHeaderValue AcceptableMimeType = MediaTypeHeaderValue.Parse("application/hal+json");
 
@@ -33,8 +33,8 @@ public class HalJsonOutputFormatter : SystemTextJsonOutputFormatter
                 if (MediaTypeHeaderValue.TryParse(headerValue, out var parsedHeader))
                 {
                     var hasSupportedHeader = context.HttpContext.Request.Headers.Accept
-                        .Select(a => new MediaTypeHeaderValue(new StringSegment(a)))
-                        .Any(x => x.IsSubsetOf(AcceptableMimeType));
+                        .Select(a => MediaTypeHeaderValue.Parse(new StringSegment(a)))
+                        .Any(a => a.IsSubsetOf(AcceptableMimeType));
 
                     return hasSupportedHeader;
                 }

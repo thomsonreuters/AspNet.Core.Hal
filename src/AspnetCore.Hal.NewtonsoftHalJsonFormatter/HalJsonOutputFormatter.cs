@@ -11,13 +11,9 @@ using System.Text;
 
 namespace AspnetCore.Hal.NewtonsoftHalJsonFormatter
 {
-    public class HalJsonOutputFormatter(JsonSerializerSettings serializerSettings, ArrayPool<char> charPool, MvcOptions options, MvcNewtonsoftJsonOptions value) : NewtonsoftJsonOutputFormatter(serializerSettings, charPool, options,value)
+    internal class HalJsonOutputFormatter(JsonSerializerSettings serializerSettings, ArrayPool<char> charPool, MvcOptions options, MvcNewtonsoftJsonOptions value) : NewtonsoftJsonOutputFormatter(serializerSettings, charPool, options, value)
     {
         private static readonly MediaTypeHeaderValue AcceptableMimeType = MediaTypeHeaderValue.Parse("application/hal+json");
-        private readonly object serializerSettings = serializerSettings;
-        private readonly ArrayPool<char> charPool = charPool;
-        private readonly MvcOptions options = options;
-        private readonly MvcNewtonsoftJsonOptions value = value;
 
         public override bool CanWriteResult(OutputFormatterCanWriteContext context)
         {
@@ -30,8 +26,8 @@ namespace AspnetCore.Hal.NewtonsoftHalJsonFormatter
                     if (MediaTypeHeaderValue.TryParse(headerValue, out var parsedHeader))
                     {
                         var hasSupportedHeader = context.HttpContext.Request.Headers.Accept
-                            .Select(a => new MediaTypeHeaderValue(new StringSegment(a)))
-                            .Any(x => x.IsSubsetOf(AcceptableMimeType));
+                            .Select(a => MediaTypeHeaderValue.Parse(new StringSegment(a)))
+                            .Any(a => a.IsSubsetOf(AcceptableMimeType));
 
 
                         return hasSupportedHeader;
@@ -52,7 +48,7 @@ namespace AspnetCore.Hal.NewtonsoftHalJsonFormatter
             return WriteResponseBodyAsync(context, Encoding.UTF8);
         }
 
-        public new Task WriteResponseBodyAsync(OutputFormatterWriteContext context, Encoding selectedEncoding)
+        public override Task WriteResponseBodyAsync(OutputFormatterWriteContext context, Encoding selectedEncoding)
         {
             var provider = context.HttpContext.RequestServices;
 
