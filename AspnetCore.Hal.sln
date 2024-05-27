@@ -1,0 +1,74 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34723.18
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B2C367CC-F374-415B-AB6B-0A35288BEC92}"
+	ProjectSection(SolutionItems) = preProject
+		Nancy.Hal\Nancy.Hal.nuspec = Nancy.Hal\Nancy.Hal.nuspec
+		..\rakefile.rb = ..\rakefile.rb
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{4D80F5CA-E27B-4B59-82B6-7E1B4FBB556B}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspnetCore.Hal", "src\AspnetCore.Hal\AspnetCore.Hal.csproj", "{D1017829-ACC3-4B93-90FA-9248FA2A7E19}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspnetCore.Hal.NewtonsoftHalJsonFormatter", "src\AspnetCore.Hal.NewtonsoftHalJsonFormatter\AspnetCore.Hal.NewtonsoftHalJsonFormatter.csproj", "{34C00C56-DF9C-4A36-BFA5-8D505D2D321F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspnetCore.Hal.Tests", "src\AspnetCore.Hal.Tests\AspnetCore.Hal.Tests.csproj", "{04BECB40-F61C-4EB5-95ED-31AC00D9D53B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspnetCore.Hal.SystemTextHalJsonFormatter", "src\AspnetCore.Hal.TextHalJsonFormatter\AspnetCore.Hal.SystemTextHalJsonFormatter.csproj", "{05B307DB-5790-4E53-9EF0-FDF18AD4BF86}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspnetCoreHal.Example", "src\AspnetCoreHal.Example\AspnetCoreHal.Example.csproj", "{D7B2ACC8-B4A9-4F5C-BE5B-AFE61524CABE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspnetCore.Hal.NewtonsoftHalJsonFormatter.Tests", "src\AspnetCore.Hal.NewtonsoftHalJsonFormatter.Tests\AspnetCore.Hal.NewtonsoftHalJsonFormatter.Tests.csproj", "{88ABF6F4-2A49-471A-8B7F-4222A5C61DE9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspnetCore.Hal.SystemTextHalJsonFormatter.Tests", "src\AspnetCore.Hal.SystemTextHalJsonFormatter.Tests\AspnetCore.Hal.SystemTextHalJsonFormatter.Tests.csproj", "{B3DFF12A-B877-45E0-8E44-E3D1847F4EF3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D1017829-ACC3-4B93-90FA-9248FA2A7E19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1017829-ACC3-4B93-90FA-9248FA2A7E19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1017829-ACC3-4B93-90FA-9248FA2A7E19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1017829-ACC3-4B93-90FA-9248FA2A7E19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34C00C56-DF9C-4A36-BFA5-8D505D2D321F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34C00C56-DF9C-4A36-BFA5-8D505D2D321F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34C00C56-DF9C-4A36-BFA5-8D505D2D321F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34C00C56-DF9C-4A36-BFA5-8D505D2D321F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04BECB40-F61C-4EB5-95ED-31AC00D9D53B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04BECB40-F61C-4EB5-95ED-31AC00D9D53B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04BECB40-F61C-4EB5-95ED-31AC00D9D53B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04BECB40-F61C-4EB5-95ED-31AC00D9D53B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05B307DB-5790-4E53-9EF0-FDF18AD4BF86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05B307DB-5790-4E53-9EF0-FDF18AD4BF86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05B307DB-5790-4E53-9EF0-FDF18AD4BF86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05B307DB-5790-4E53-9EF0-FDF18AD4BF86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7B2ACC8-B4A9-4F5C-BE5B-AFE61524CABE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7B2ACC8-B4A9-4F5C-BE5B-AFE61524CABE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7B2ACC8-B4A9-4F5C-BE5B-AFE61524CABE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7B2ACC8-B4A9-4F5C-BE5B-AFE61524CABE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88ABF6F4-2A49-471A-8B7F-4222A5C61DE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88ABF6F4-2A49-471A-8B7F-4222A5C61DE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88ABF6F4-2A49-471A-8B7F-4222A5C61DE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88ABF6F4-2A49-471A-8B7F-4222A5C61DE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3DFF12A-B877-45E0-8E44-E3D1847F4EF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3DFF12A-B877-45E0-8E44-E3D1847F4EF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3DFF12A-B877-45E0-8E44-E3D1847F4EF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3DFF12A-B877-45E0-8E44-E3D1847F4EF3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C44DCC87-23D8-439A-BCA1-EA9C02FE6855}
+	EndGlobalSection
+EndGlobal

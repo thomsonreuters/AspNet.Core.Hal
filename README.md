@@ -1,35 +1,18 @@
-** Announcement ** - Nancy.Hal is no longer being maintained! Since NancyFx is no longer being maintained, it doesn't make sense for Nancy.Hal to exist either.
-Thanks to all who contributed to this project.
-
-Nancy.Hal [![NuGet Badge](https://buildstats.info/nuget/Nancy.Hal)](https://www.nuget.org/packages/Nancy.Hal/)
-=========
-
-Adds lightweight support for the Hal+JSON media type to Nancy
-
-For Nancy 2.0.0-alpha support there is a [pre-release](https://www.nuget.org/packages/Nancy.Hal/2.0.0-alpha0001) package available.
-
 What is Hal?
 ===========
 [Specification](http://stateless.co/hal_specification.html)
 
-What Nancy.Hal does
-============
- - Allows Nancy web services to return hal+json formatted responses
- - Allows your web services to return plain old JSON/XML representations of your POCOs
- - Does not require your models to inherit from any base classes or implement any interfaces
- - Uses a fluent declarative syntax to configure the links used to decorate your hypermedia resources
- - Works with whatever JSON Serializer you are using with Nancy
-
-What Nancy.Hal does not do
-===================
- - Handle hal+xml responses
- - Deserialize Hal representations back into POCOs (HAL is a serialization format, but says nothing about how to update documents)
 
 Get started
 =============
-1) Install the Nancy.Hal package
+1) Install the AspnetCore.Hal.SystemTextHalJsonFormatter package if we are using System.Text.Json 
 ```powershell
-Install-Package Nancy.Hal
+Install-Package AspnetCore.Hal.SystemTextHalJsonFormatter
+```
+   Install the AspnetCore.Hal.NewtonsoftHalJsonFormatter package if we are using Newtonsoft  
+
+```powershell
+Install-Package AspnetCore.Hal.NewtonsoftHalJsonFormatter
 ```
 
 
@@ -62,34 +45,39 @@ config.For<PagedList<UserSummary>>()
 
 
 //per request configuration
-public ExampleModule()
-{
-    this.Get["/"] = _ => 
+ [ApiController]
+    [Route("[controller]")]
+    public class RolesController : Controller
     {
-        this.Context
-            .LocalHalConfigFor<Users>()
-            .Links("relation", "/link");
+        private  readonly IMapper _mapper;    
+        public RolesController(IMapper mapper) 
+        
+        {
+            _mapper = mapper;
+        }
 
-        return 200;
-    };
+        [HttpGet(Name = "GetRoles")]
+        public IEnumerable<Role> Get()
+        {
+            Database db=new Database(_mapper);   
+            CreateTestDataIn(db);
+            var roles = db.GetAllRoles();
+            return roles;
+        }
 }
 ```
 
-3) Register it in your application container.
+3) Register it in Program.cs of your application as below.
 ```csharp
-//TinyIOC
-container.Register(typeof(IProvideHalTypeConfiguration), config);
+builder.Services.AddSingleton<IProvideHalTypeConfiguration>(provider => Halconfig.HypermediaConfiguration());
 
-//NInject
-kernel.Bind<IProvideHalTypeConfiguration>().ToConstant(config);
+builder.Services.AddHalSupport();
 ```
 
-4) That's it! Don't forget to set your `Accept` header to `application/hal+json`
+4) Set your `Accept` header to `application/hal+json`
+
+
 
 Acknowledgements
 ================
-This library could not exist without the work and ideas of others:
- - It started as a port of [Jake Ginnivan](http://twitter.com/jakeginnivan)'s [WebApi.Hal](https://github.com/JakeGinnivan/WebApi.Hal)
- - ..which in turn is based on the work of [Steve Michelotti](https://bitbucket.org/smichelotti/hal-media-type)'s hal-media-type
- - The fluent configuration idea was lifted from [https://github.com/kekekeks/hal-json-net/tree/master/HalJsonNet](here)
- - And ideas were borrowed from [wis3guy](https://github.com/wis3guy)
+This library could not exist without the work and ideas of Nancy.Hal
