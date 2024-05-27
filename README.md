@@ -7,7 +7,7 @@ Get started
 =============
 1) Install the AspnetCore.Hal.SystemTextHalJsonFormatter package if we are using System.Text.Json 
 ```powershell
-Install-Package AspnetCore.Hal.NewtonsoftHalJsonFormatter
+Install-Package AspnetCore.Hal.SystemTextHalJsonFormatter
 ```
    Install the AspnetCore.Hal.NewtonsoftHalJsonFormatter package if we are using Newtonsoft  
 
@@ -80,4 +80,4 @@ builder.Services.AddHalSupport();
 
 Acknowledgements
 ================
-This library could not exist without the work and ideas of 
+This library could not exist without the work and ideas of Nancy.Hal

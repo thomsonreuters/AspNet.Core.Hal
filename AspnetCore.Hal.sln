@@ -26,6 +26,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspnetCore.Hal.SystemTextHa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspnetCoreHal.Example", "src\AspnetCoreHal.Example\AspnetCoreHal.Example.csproj", "{D7B2ACC8-B4A9-4F5C-BE5B-AFE61524CABE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspnetCore.Hal.NewtonsoftHalJsonFormatter.Tests", "src\AspnetCore.Hal.NewtonsoftHalJsonFormatter.Tests\AspnetCore.Hal.NewtonsoftHalJsonFormatter.Tests.csproj", "{88ABF6F4-2A49-471A-8B7F-4222A5C61DE9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspnetCore.Hal.SystemTextHalJsonFormatter.Tests", "src\AspnetCore.Hal.SystemTextHalJsonFormatter.Tests\AspnetCore.Hal.SystemTextHalJsonFormatter.Tests.csproj", "{B3DFF12A-B877-45E0-8E44-E3D1847F4EF3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +56,14 @@ Global
 		{D7B2ACC8-B4A9-4F5C-BE5B-AFE61524CABE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7B2ACC8-B4A9-4F5C-BE5B-AFE61524CABE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7B2ACC8-B4A9-4F5C-BE5B-AFE61524CABE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88ABF6F4-2A49-471A-8B7F-4222A5C61DE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88ABF6F4-2A49-471A-8B7F-4222A5C61DE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88ABF6F4-2A49-471A-8B7F-4222A5C61DE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88ABF6F4-2A49-471A-8B7F-4222A5C61DE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3DFF12A-B877-45E0-8E44-E3D1847F4EF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3DFF12A-B877-45E0-8E44-E3D1847F4EF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3DFF12A-B877-45E0-8E44-E3D1847F4EF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3DFF12A-B877-45E0-8E44-E3D1847F4EF3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

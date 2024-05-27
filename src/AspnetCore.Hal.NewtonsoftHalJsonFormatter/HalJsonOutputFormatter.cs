@@ -8,9 +8,11 @@ using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using System.Buffers;
 using System.Text;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("AspnetCore.Hal.NewtonsoftHalJsonFormatter.Tests")]
 namespace AspnetCore.Hal.NewtonsoftHalJsonFormatter
-{
+{    
     internal class HalJsonOutputFormatter(JsonSerializerSettings serializerSettings, ArrayPool<char> charPool, MvcOptions options, MvcNewtonsoftJsonOptions value) : NewtonsoftJsonOutputFormatter(serializerSettings, charPool, options, value)
     {
         private static readonly MediaTypeHeaderValue AcceptableMimeType = MediaTypeHeaderValue.Parse("application/hal+json");
