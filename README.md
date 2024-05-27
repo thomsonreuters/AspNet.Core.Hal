@@ -76,9 +76,8 @@ builder.Services.AddHalSupport();
 
 4) Set your `Accept` header to `application/hal+json`
 
+
+
+Acknowledgements
 ================
-This library could not exist without the work and ideas of others:
- - It started as a port of [Jake Ginnivan](http://twitter.com/jakeginnivan)'s [WebApi.Hal](https://github.com/JakeGinnivan/WebApi.Hal)
- - ..which in turn is based on the work of [Steve Michelotti](https://bitbucket.org/smichelotti/hal-media-type)'s hal-media-type
- - The fluent configuration idea was lifted from [https://github.com/kekekeks/hal-json-net/tree/master/HalJsonNet](here)
- - And ideas were borrowed from [wis3guy](https://github.com/wis3guy)
+This library could not exist without the work and ideas of 
