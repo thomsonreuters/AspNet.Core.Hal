@@ -21,20 +21,9 @@ namespace AspnetCore.Hal.NewtonsoftHalJsonFormatter
             {
                 return false;
             }
-            var hasSupportedHeader = acceptHeader.Any(headerValue =>
-                {
-                    if (MediaTypeHeaderValue.TryParse(headerValue, out var parsedHeader))
-                    {
-                        var hasSupportedHeader = context.HttpContext.Request.Headers.Accept
-                            .Select(a => MediaTypeHeaderValue.Parse(new StringSegment(a)))
-                            .Any(a => a.IsSubsetOf(AcceptableMimeType));
-
-
-                        return hasSupportedHeader;
-                    }
-                    return false;
-                });
-
+            var hasSupportedHeader = context.HttpContext.Request.Headers.Accept
+               .Select(a => MediaTypeHeaderValue.Parse(new StringSegment(a)))
+               .Any(a => a.IsSubsetOf(AcceptableMimeType));
             var provider = context.HttpContext.RequestServices;
             var cfg = provider.GetService<IProvideHalTypeConfiguration>();
 
