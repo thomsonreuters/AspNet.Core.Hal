@@ -72,6 +72,32 @@ namespace AspnetCore.Hal.NewtonsoftHalJsonFormatter.Tests
         }
 
         [Fact]
+        public void CanWriteResult_ShouldReturnTrue_WhenAcceptHeaderIsValidBasedOnQualityFactor()
+        {
+            // Arrange
+            var context = CreateOutputFormatterCanWriteContext("application/hal+json, application/json;q=0.667 , application/import+json; q=0.333");
+
+            // Act
+            var result = _formatter.CanWriteResult(context);
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void CanWriteResult_ShouldReturnFalse_WhenAcceptHeaderIsNotValidBasedOnQualityFactor()
+        {
+            // Arrange
+            var context = CreateOutputFormatterCanWriteContext("application/hal+json;q=0.667, application/json;q=1.0 , application/import+json; q=0.333");
+
+            // Act
+            var result = _formatter.CanWriteResult(context);
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Fact]
         public async Task WriteAsync_ShouldSetContentTypeAndCallBaseMethods()
         {
             // Arrange
