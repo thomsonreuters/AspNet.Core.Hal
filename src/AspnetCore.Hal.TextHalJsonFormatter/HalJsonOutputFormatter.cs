@@ -8,13 +8,14 @@ using Microsoft.Extensions.DependencyInjection;
 using AspnetCore.Hal.Processors;
 using Microsoft.Net.Http.Headers;
 using Microsoft.Extensions.Primitives;
+using System.Net.Http.Headers;
 
 
 namespace AspnetCore.Hal.SystemTextHalJsonFormatter;
 
 internal class HalJsonOutputFormatter : SystemTextJsonOutputFormatter
 {
-    private static readonly MediaTypeHeaderValue AcceptableMimeType = MediaTypeHeaderValue.Parse("application/hal+json");
+    private static readonly Microsoft.Net.Http.Headers.MediaTypeHeaderValue AcceptableMimeType = Microsoft.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/hal+json");
 
     public HalJsonOutputFormatter(JsonSerializerOptions jsonSerializerOptions) : base(jsonSerializerOptions)
     {
@@ -29,9 +30,19 @@ internal class HalJsonOutputFormatter : SystemTextJsonOutputFormatter
         {
             return false;
         }
-        var hasSupportedHeader = context.HttpContext.Request.Headers.Accept
-    .Select(a => MediaTypeHeaderValue.Parse(new StringSegment(a)))
-    .Any(a => a.IsSubsetOf(AcceptableMimeType));
+
+        var acceptHeaders = context.HttpContext.Request.Headers["Accept"].ToString().Split(',')
+                .Select(h => MediaTypeWithQualityHeaderValue.Parse(h.Trim()))
+                .OrderByDescending(h => h.Quality ?? 1.0)  // Sort by quality factor in descending order
+                .ToList();
+
+
+        // Check if the top value matches the acceptable MIME type
+        var qualityHeader = acceptHeaders.FirstOrDefault();
+
+        var hasSupportedHeader = qualityHeader != null &&
+                                 Microsoft.Net.Http.Headers.MediaTypeHeaderValue.Parse(new StringSegment(qualityHeader.MediaType))
+                                 .IsSubsetOf(Microsoft.Net.Http.Headers.MediaTypeHeaderValue.Parse(new StringSegment(AcceptableMimeType.ToString())));
 
         var provider = context.HttpContext.RequestServices;
         var cfg = provider.GetService<IProvideHalTypeConfiguration>();
